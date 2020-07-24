@@ -29,6 +29,12 @@ function CorrectHorseBatteryStaple() {
 
 	this.words = [];
 
+	this.dictionaries = {
+		"primary": { file: "wordlist.txt", active: true },
+		"jargon": { file: "jargon.txt" },
+		"science": { file: "science-terms.txt" },
+	};
+
 	/**
 	 * UI references
 	 * @private
@@ -150,31 +156,29 @@ function CorrectHorseBatteryStaple() {
 	 * The data file is assumed to be a CSV list of words and will be
 	 * split in to an array of words and appended to the main data key
 	 *
-	 * @param {string} file File to load
+	 * @param {string} dictName Dictionary to load
 	 * @param {Function} [callback] optional callback
 	 */
-	this.loadData = function(file, callback) {
+	this.loadData = function(dictName, callback) {
 
-		$.get("data/" + file, function(content, textStatus) {
+		return $.get("data/" + self.dictionaries[dictName].file, function(content, textStatus) {
 
-			self.dataSets[file] = content.toString().split(",");
-			self.data = self.data.concat(self.dataSets[file]);
-
+			self.dictionaries[dictName].data = content.toString().split(",");
+			self.data = self.getDataForActiveDictionaries();
 			if ( callback ) {
 				callback.call(this, content, textStatus);
 			}
 
 		}, "text");
+	};
 
-		// @TODO: Turn this in to a .ajax() request and add Error handler
-		//  error: function(xhr, status, error) {
-		//	if (!console.warn) {
-		//		return;
-		//	}
-		//  console.warn("An AJAX error occured: \nError: " + error);
-		//	console.warn("This likely means an issue on the server or the connection between the client and server.\n\nPlease try to again later. If this error persists, please contact the site administrator.");
-		//  }
-
+	this.getDataForActiveDictionaries = function() {
+		return Object.values(self.dictionaries)
+		.filter(d => d.active)
+		.map(dict => dict.data)
+		.reduce((data, dict) => {
+			return data.concat(dict);
+		}, []);
 	};
 
 
@@ -347,26 +351,24 @@ function CorrectHorseBatteryStaple() {
 
 		});
 
-		//$("#jargon").on("change", function(){
-		//	var file = "jargon.txt";
-		//
-		//	if ($(this).is(":checked")){
-		//		if (!self.dataSets[file]) {
-		//			self.loadData(file);
-		//		}
-		//		else {
-		//			self.data = self.data.concat(self.dataSets[file]);
-		//		}
-		//	}
-		//	else {
-		//		self.data = self.dataSets["wordlist.txt"];
-		//	}
-		//
-		//});
+
+		$("input[data-option^='dict-']").on("change", function(){
+			const checked = $(this).prop("checked");
+			const dict = $(this).attr('data-dict');
+			self.dictionaries[dict].active = checked;
+			
+			if (checked === true){
+				if (!self.dictionaries[dict].data) {
+					self.loadData(dict);
+				}
+			}
+			self.data = self.getDataForActiveDictionaries();
+
+		});
 
 
 		$(".fieldset")
-			.on('click', "legend", function() {
+			.on('click', "> legend", function() {
 			$(this).closest(".fieldset").toggleClass("active");
 		});
 
@@ -397,12 +399,18 @@ function CorrectHorseBatteryStaple() {
 			});
 		}
 
-
-		// Load the default words
-		this.loadData("wordlist.txt", function() {
-			self.generate();
+		// mark saved dictionaries as active
+		Object.entries(this.dictionaries).forEach(([name, dict]) => {
+			if (this.options['dict-' + name]) {
+				this.dictionaries[name].active = true;
+			}
 		});
 
+		// load all the active dictionaries
+		Promise.all(Object.entries(this.dictionaries).filter(([dictName, dict]) => dict.active).map(([dictName, dict]) => {
+			return this.loadData(dictName)
+		})).then(() => this.generate());
+		
 		// Bind Events
 		this.bindEvents();
 	};

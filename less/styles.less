@@ -60,19 +60,19 @@ h1 {
         color: #555;
 
         &:hover,
-        &:focus {
+        &:focus { 
             color: #999;
         }
     }
 
-}
+} 
 
 .fieldset {
     border: 0;
     padding: 0;
     margin: 10px 0;
 
-    legend {
+    > legend {
         display: none;
     }
 }
@@ -208,7 +208,8 @@ h2 {
         height: auto;
     }
 
-    .fieldset legend {
+    .fieldset > legend {
+        cursor: pointer;
         display: block;
         font-weight: bold;
         position: relative;
@@ -222,18 +223,18 @@ h2 {
         border: 1px solid #2e2e2e;
         box-shadow: 0px 1px 3px rgba(000, 000, 000, 0.3), inset 0px 0px 1px rgba(255, 255, 255, 1);
         text-shadow: 0px -1px 0px rgba(000, 000, 000, 0.7), 0px 1px 0px rgba(255, 255, 255, 0.3);
+    
+        &::before {
+            content: " + ";
+            position: absolute;
+            left: 5px;
+            top: -2px;
+            font-size: 20px;
+            font-weight: bold;
+        }
     }
 
-    .fieldset legend::before {
-        content: " + ";
-        position: absolute;
-        left: 5px;
-        top: -2px;
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .fieldset.active legend::before {
+    .fieldset.active > legend::before {
         content: " – ";
         top: -3px;
     }
