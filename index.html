@@ -17,9 +17,9 @@
 	<meta name="HandheldFriendly" content="True" />
 	<meta name="MobileOptimized" content="320" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
 
-	<link rel="stylesheet" href="css/styles.css" />
+	<link rel="stylesheet" href="css/styles.min.css" />
 </head>
 <body>
 
@@ -29,10 +29,18 @@
 			<h2>Secure password generator to help keep you safer online</h2>
 			<hr>
 			<div class="field input">
-				<input type="text" id="txt"/><strong>Length:</strong><em>0</em>
+				<input type="text" id="txt"/>
+				<button id="copy">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" id="copyIcon">
+						<path d="M15 5H5V15H7V16H4V4H16V7H15V5Z" fill="#333"></path>
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M8 20V8H20V20H8ZM9 9H19V19H9V9Z" fill="#333"></path>
+					</svg>
+					<span>Copy to clipboard</span>
+				</button>
+				<span class="phrase-length"><strong>Length:</strong> <em>0</em></span>
 			</div>
 
-			<div class="fieldset">
+			<fieldset class="fieldset">
 				<legend>Options</legend>
 				<div class="field">
 					<label for="min-words">Min words</label>
@@ -84,11 +92,18 @@
 					<label for="save-options"><strong>Save these options.*</strong></label>
 				</div>
 
-				<!--<div class="field cbx">-->
-				<!--	<input type="checkbox" id="jargon" />-->
-				<!--	<label for="jargon">Add more words to the mix*</label>-->
-				<!--</div>-->
-			</div>
+				<fieldset>
+					<legend>Additional dicionaries</legend>
+					<div class="field cbx">
+						<input type="checkbox" id="jargon" data-dict="jargon" data-option="dict-jargon" />
+						<label for="jargon">Jargon file</label>
+					</div>
+					<div class="field cbx">
+						<input type="checkbox" id="science" data-dict="science" data-option="dict-science" />
+						<label for="science">Science terms</label>
+					</div>
+				</fieldset>
+			</fieldset>
 
 			<div class="field"><input type="button" id="btn-generate" class="button" value="Generate password"/></div>
 		</div>
@@ -101,7 +116,7 @@
 		<p>Other languages: <a href="https://korrektpferdbatteriestapel.de/">German (deutsch)</a></p>
 	</div>
 
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 
 	<script type="text/javascript">
@@ -112,7 +127,7 @@
 
 		(function() {
 			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			ga.src = 'https://ssl.google-analytics.com/ga.js';
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		}());
 

@@ -27,9 +27,9 @@ hr {
 h1 {
     font-size: 38px;
     margin: 0 auto;
-    width: 900px;
+    width: 1000px;
     position: relative;
-    padding: 5px 50px 10px;
+    padding: 10px 50px;
     background: #eeeeee; /* Old browsers */
     background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%);
     border-radius: 10px 10px 0 0;
@@ -38,7 +38,7 @@ h1 {
 
 #content {
     margin: 0 auto;
-    width: 900px;
+    width: 1000px;
     padding: 10px 50px 40px;
     background: #ccc;
     border-radius: 0 0 10px 10px;
@@ -60,19 +60,19 @@ h1 {
         color: #555;
 
         &:hover,
-        &:focus {
+        &:focus { 
             color: #999;
         }
     }
 
-}
+} 
 
 .fieldset {
     border: 0;
     padding: 0;
     margin: 10px 0;
 
-    legend {
+    > legend {
         display: none;
     }
 }
@@ -83,31 +83,59 @@ input {
     padding: 3px 5px;
 }
 
+.field {
+    padding: 7px 0;
+}
+.input {
+    display: grid;
+    grid-template-columns: 1fr 50px 120px;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas: ". . .";
+  }
+
 #txt {
-    height: 44px;
-    width: 730px;
+    height: 60px;
+    width: 100%;
     padding: 10px;
     border: 1px solid #999;
     background: #fefefe;
-    font-size: 18px;
+    font-size: 20px;
     border-radius: 4px;
+    transition: background-color 0.2s ease-in;
+
+    &.copied {
+        background-color: #a4ffb0;
+    }
 }
 
-.input strong {
-    position: relative;
-    left: 10px;
-    top: -26px;
-    margin-right: -30px;
+#copy {
+    width:50px;
+    height:60px;
+    white-space: nowrap;
+    overflow: hidden;
+    position:relative;
+    border: 1px solid #999;
+    background: #fefefe;
+    border-radius: 4px;
+
+    span {
+        position: absolute;
+        left: 100%;
+    }
+}
+.phrase-length {
+    display: inline-grid;
+    align-items: center;
+    text-align: center;
+    padding-left: 20px;
+    font-size: 20px;
 }
 
 h2 {
     font-size: 26px;
     margin-top: 0;
     padding-top: 20px;
-}
-
-.field {
-    padding: 7px 0;
 }
 
 .cbx {
@@ -160,7 +188,7 @@ h2 {
 }
 
 /* Smartphones (portrait and landscape) ----------- */
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 1050px) {
     body {
         padding: 3px;
     }
@@ -172,9 +200,9 @@ h2 {
     }
 
     #txt {
-        width: 95%;
+        width: 100%;
         padding: 8px 2%;
-        font-size: 16px;
+        font-size: 20px;
         margin: 0 0 3px;
     }
 
@@ -193,10 +221,23 @@ h2 {
         padding: 0;
     }
 
-    .input strong {
-        position: static;
-        margin-right: 5px;
+    .input {
+        grid-template-columns: 1fr 50px 100px;
     }
+
+    .cbx label {
+        width: 80%;
+        margin-left: 5px;
+    }
+
+    .button {
+        padding: 10px;
+        width: 100%;
+    }
+}
+
+
+@media only screen and (max-width: 700px) {
 
     .fieldset {
         height: 30px;
@@ -208,7 +249,8 @@ h2 {
         height: auto;
     }
 
-    .fieldset legend {
+    .fieldset > legend {
+        cursor: pointer;
         display: block;
         font-weight: bold;
         position: relative;
@@ -222,33 +264,23 @@ h2 {
         border: 1px solid #2e2e2e;
         box-shadow: 0px 1px 3px rgba(000, 000, 000, 0.3), inset 0px 0px 1px rgba(255, 255, 255, 1);
         text-shadow: 0px -1px 0px rgba(000, 000, 000, 0.7), 0px 1px 0px rgba(255, 255, 255, 0.3);
+    
+        &::before {
+            content: " + ";
+            position: absolute;
+            left: 5px;
+            top: -2px;
+            font-size: 20px;
+            font-weight: bold;
+        }
     }
 
-    .fieldset legend::before {
-        content: " + ";
-        position: absolute;
-        left: 5px;
-        top: -2px;
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .fieldset.active legend::before {
+    .fieldset.active > legend::before {
         content: " – ";
         top: -3px;
     }
 
     .fieldset small {
         display: none;
-    }
-
-    .cbx label {
-        width: 80%;
-        margin-left: 5px;
-    }
-
-    .button {
-        padding: 10px;
-        width: 100%;
     }
 }
