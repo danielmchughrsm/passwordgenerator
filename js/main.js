@@ -372,6 +372,25 @@ function CorrectHorseBatteryStaple() {
 			$(this).closest(".fieldset").toggleClass("active");
 		});
 
+		$("#copy").on('click', (e) => {
+			e.preventDefault();
+			this.copyToClipboard();
+			e.target.focus();
+		});
+
+	};
+
+	this.copyToClipboard = function() {
+		const el = document.getElementById('txt');
+		el.select();
+		document.execCommand('copy');
+		el.setSelectionRange(0,0);
+		el.classList.add('copied');
+
+		setTimeout(() => {
+			el.classList.remove('copied');
+		}, 300);
+
 	};
 
 
