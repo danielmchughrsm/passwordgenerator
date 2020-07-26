@@ -1,6 +1,20 @@
 * {
   box-sizing: border-box;
 }
+.pressable {
+  position: relative;
+}
+.pressable:active {
+  top: 1px;
+  left: 1px;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+  gap: 0px 20px;
+  grid-template-areas: ". .";
+}
 body {
   background: #222;
   color: #111;
@@ -57,12 +71,37 @@ h1 {
 .footnote a:focus {
   color: #999;
 }
-.fieldset {
+#notifications {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.3s 0.1s ease-in-out;
+}
+#notifications.active {
+  opacity: 1;
+}
+#notifications .notification {
+  width: 100%;
+  padding: 20px 10px;
+  color: #000;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+#notifications .notification.success {
+  background-color: #aefdb9;
+}
+#notifications .notification.fail {
+  background-color: #fdacac;
+}
+.options {
   border: 0;
   padding: 0;
   margin: 10px 0;
 }
-.fieldset > legend {
+.options > legend {
   display: none;
 }
 input {
@@ -91,7 +130,10 @@ input {
   transition: background-color 0.2s ease-in;
 }
 #txt.copied {
-  background-color: #a4ffb0;
+  background-color: #aefdb9;
+}
+#txt.notcopied {
+  background-color: #fdacac;
 }
 #copy {
   width: 50px;
@@ -99,9 +141,14 @@ input {
   white-space: nowrap;
   overflow: hidden;
   position: relative;
+  padding: 2px 6px;
   border: 1px solid #999;
   background: #fefefe;
   border-radius: 4px;
+}
+#copy:active {
+  top: 1px;
+  left: 1px;
 }
 #copy span {
   position: absolute;
@@ -113,6 +160,16 @@ input {
   text-align: center;
   padding-left: 20px;
   font-size: 20px;
+}
+#copy-to-url {
+  padding-left: 45px;
+  padding-right: 20px;
+}
+#copy-to-url svg {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  fill: #fff;
 }
 h2 {
   font-size: 26px;
@@ -130,11 +187,19 @@ h2 {
   width: auto;
   margin-left: 20px;
 }
+.actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+  gap: 0px 20px;
+  grid-template-areas: ". .";
+}
 .button {
-  cursor: pointer;
   position: relative;
+  cursor: pointer;
   padding: 10px 80px;
   outline: 0 none;
+  width: 100%;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
   color: #ffffff;
@@ -147,6 +212,10 @@ h2 {
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.7), 0px 1px 0px rgba(255, 255, 255, 0.3);
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+.button:active {
+  top: 1px;
+  left: 1px;
+}
 .button:focus,
 .button:hover {
   background: linear-gradient(to bottom, #999999 0%, #303030 100%);
@@ -157,8 +226,6 @@ h2 {
   background: linear-gradient(to bottom, #999999 0%, #2a2a2a 100%);
   /* W3C */
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.6), inset 0px 0px 1px #ffffff;
-  top: 1px;
-  left: 1px;
 }
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen and (max-width: 1050px) {
@@ -203,15 +270,12 @@ h2 {
   }
 }
 @media only screen and (max-width: 700px) {
-  .fieldset {
+  fieldset.options {
     height: 30px;
     padding-left: 15px;
     overflow: hidden;
   }
-  .fieldset.active {
-    height: auto;
-  }
-  .fieldset > legend {
+  fieldset.options > legend {
     cursor: pointer;
     display: block;
     font-weight: bold;
@@ -226,7 +290,7 @@ h2 {
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3), inset 0px 0px 1px #ffffff;
     text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.7), 0px 1px 0px rgba(255, 255, 255, 0.3);
   }
-  .fieldset > legend::before {
+  fieldset.options > legend::before {
     content: " + ";
     position: absolute;
     left: 5px;
@@ -234,11 +298,14 @@ h2 {
     font-size: 20px;
     font-weight: bold;
   }
-  .fieldset.active > legend::before {
+  fieldset.options.active {
+    height: auto;
+  }
+  fieldset.options.active > legend::before {
     content: " – ";
     top: -3px;
   }
-  .fieldset small {
+  fieldset.options small {
     display: none;
   }
 }
