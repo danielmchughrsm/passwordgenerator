@@ -58,7 +58,9 @@ function CorrectHorseBatteryStaple() {
 		firstUpper:    true,
 		minWords:      3,
 		appendNumbers: true,
-		separator:     "-"
+		separator:     "-",
+		"dict-jargon": false,
+		"dict-science": false,
 	};
 
 	/**
@@ -411,48 +413,88 @@ function CorrectHorseBatteryStaple() {
 		});
 
 
-		$(".fieldset")
-			.on('click', "> legend", function() {
-			$(this).closest(".fieldset").toggleClass("active");
+		$("fieldset.options > legend").on('click', function() {
+			$(this).closest("fieldset").toggleClass("active");
 		});
 
-		$("#copy").on('click', (e) => {
+		$("#copy").on('click', e => {
 			e.preventDefault();
-			this.copyToClipboard();
+			this.copyPassword();
 			e.target.focus();
 		});
 
+		$("#copy-to-url").on('click', e => {
+			const href = window.location.href;
+			const baseUrl = href.substr(0, Math.max(href.indexOf('?'), href.length));
+			const search = '?' + this.optionsToQueryString();
+			_copy(baseUrl + search, 'URL')
+		});
+
 	};
 
-	this.copyToClipboard = function() {
+	const notification = (type, message) => {
+		return `<div class="notification ${type}">${message}</div>`;
+	};
+
+	this.notify = function(type, msg) {
+		$('#notifications').addClass('active').html(notification(type, msg));
+		clearTimeout(this.notificationTimer);
+		this.notificationTimer = setTimeout(() => {
+			$('#notifications').removeClass('active');
+		}, 10000);
+	}
+
+	const _copy = (value, subject) => navigator.clipboard
+		.writeText(value)
+		.then(() => 'copied', () => 'notcopied')
+		.then(result => {
+			if (result === 'copied') {
+				this.notify('success', `${subject} copied to clipboard`);
+			} else {
+				this.notify('fail', `${subject} could not be copied to clipboard. Please ensure your browser has clipboard permissions allowed for this site.`)
+			}
+			return result;
+		});
+
+	this.copyPassword = function() {
 		const el = document.getElementById('txt');
-		el.select();
-		document.execCommand('copy');
-		el.setSelectionRange(0,0);
-		el.classList.add('copied');
-
-		setTimeout(() => {
-			el.classList.remove('copied');
-		}, 300);
+		_copy(el.value, 'Password').then(result => {
+			el.classList.add(result)
+			setTimeout(() => {
+				el.classList.remove(result);
+			}, 300);
+		})
 
 	};
 
+	this.loadOptions = function(){ 
+		let queryParams = {};
 
-	/**
-	 * Initialize this horse
-	 */
-	this.init = function() {
+		if (window.location.search) {
+			// try and get options from the query params
+			// substring from 1 to remove the leading '?'
+			queryParams = Array
+				.from((new URLSearchParams(window.location.search)).entries())
+				.reduce((map, [k,v]) => {
+					//parse out the values that are meant to be boolean
+					if (typeof this.options[k] === 'boolean') {
+						v = v === 'true' ? true : false;
+					} 
+					map[k] = v;
+					return map;
+				}, {});
+		}
 
 		// Load options from the LocalStorage if present
 		if ( this.storage && this.storage.getItem(this.config.storageKey) ) {
 			try {
-				this.options = JSON.parse(this.storage.getItem(this.config.storageKey));
+				const lsOptions = JSON.parse(this.storage.getItem(this.config.storageKey));
+				this.options = { ...lsOptions, ...queryParams };
 				this.setAllUIOptions();
 
 			} catch ( e ) {
 				console.log("Could not parse settings from LocalStorage");
 			}
-
 		}
 
 		// no local storage available, read the options from the UI
@@ -460,7 +502,23 @@ function CorrectHorseBatteryStaple() {
 			$("[data-option]").each(function() {
 				self.setOptionFromUI(this);
 			});
-		}
+			if (Object.keys(queryParams).length) {
+				this.options = { ...this.options, ...queryParams }
+				this.setAllUIOptions();
+			}
+		}		
+	}
+
+	this.optionsToQueryString = function() {
+		return (new URLSearchParams(Object.entries(this.options))).toString();
+	};
+
+	/**
+	 * Initialize this horse
+	 */
+	this.init = function() {
+
+		this.loadOptions();
 
 		// mark saved dictionaries as active
 		Object.entries(this.dictionaries).forEach(([name, dict]) => {

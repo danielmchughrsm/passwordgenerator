@@ -2,6 +2,28 @@
     box-sizing: border-box;
 }
 
+@success-color: #aefdb9;
+@fail-color: #fdacac;
+// Mixins
+.pressable {
+    position: relative;
+
+    &:active {
+        top: 1px;
+        left: 1px;
+    }
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr;
+    gap: 0px 20px;
+    grid-template-areas: ". .";
+}
+
+// End Mixins
+
 body {
     background: #222;
     color: #111;
@@ -67,14 +89,45 @@ h1 {
 
 } 
 
-.fieldset {
+#notifications {
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.3s 0.1s ease-in-out;
+
+    &.active {
+        opacity: 1;
+    }
+
+    .notification {
+        width: 100%;
+        padding: 20px 10px;
+        color: #000;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+
+        &.success {
+            background-color: @success-color;
+        }
+        &.fail {
+            background-color: @fail-color;
+        }
+    }
+    
+}
+
+.options {
     border: 0;
     padding: 0;
     margin: 10px 0;
-
+    
     > legend {
         display: none;
     }
+    
 }
 
 input {
@@ -86,6 +139,7 @@ input {
 .field {
     padding: 7px 0;
 }
+
 .input {
     display: grid;
     grid-template-columns: 1fr 50px 120px;
@@ -105,16 +159,23 @@ input {
     transition: background-color 0.2s ease-in;
 
     &.copied {
-        background-color: #a4ffb0;
+        background-color: @success-color;
+    }
+
+    &.notcopied {
+        background-color: @fail-color;
     }
 }
 
 #copy {
+    .pressable();
+
     width:50px;
     height:60px;
     white-space: nowrap;
     overflow: hidden;
     position:relative;
+    padding: 2px 6px;
     border: 1px solid #999;
     background: #fefefe;
     border-radius: 4px;
@@ -124,12 +185,25 @@ input {
         left: 100%;
     }
 }
+
 .phrase-length {
     display: inline-grid;
     align-items: center;
     text-align: center;
     padding-left: 20px;
     font-size: 20px;
+}
+
+#copy-to-url {
+    padding-left: 45px;
+    padding-right: 20px;
+
+    svg {
+        position: absolute;
+        left:10px;
+        top: 8px;
+        fill: #fff;
+    }
 }
 
 h2 {
@@ -152,11 +226,17 @@ h2 {
     margin-left: 20px;
 }
 
+.actions {
+    .grid-container();
+}
+
 .button {
+    .pressable();
+
     cursor: pointer;
-    position: relative;
     padding: 10px 80px;
     outline: 0 none;
+    width:100%;
 
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
@@ -182,9 +262,6 @@ h2 {
 .button:active {
     background: linear-gradient(to bottom, #999999 0%, #2a2a2a 100%); /* W3C */
     box-shadow: 0px 1px 5px rgba(000, 000, 000, 0.6), inset 0px 0px 1px rgba(255, 255, 255, 1);
-
-    top: 1px;
-    left: 1px;
 }
 
 /* Smartphones (portrait and landscape) ----------- */
@@ -239,48 +316,48 @@ h2 {
 
 @media only screen and (max-width: 700px) {
 
-    .fieldset {
+    fieldset.options {
         height: 30px;
         padding-left: 15px;
         overflow: hidden;
-    }
 
-    .fieldset.active {
-        height: auto;
-    }
-
-    .fieldset > legend {
-        cursor: pointer;
-        display: block;
-        font-weight: bold;
-        position: relative;
-        margin-left: -15px;
-
-        font-size: 16px;
-        color: #464646;
-        padding: 2px 10px 2px 20px;
-        background: linear-gradient(to bottom, #ededed 0%, #c7c7c7 100%);
-        border-radius: 4px;
-        border: 1px solid #2e2e2e;
-        box-shadow: 0px 1px 3px rgba(000, 000, 000, 0.3), inset 0px 0px 1px rgba(255, 255, 255, 1);
-        text-shadow: 0px -1px 0px rgba(000, 000, 000, 0.7), 0px 1px 0px rgba(255, 255, 255, 0.3);
-    
-        &::before {
-            content: " + ";
-            position: absolute;
-            left: 5px;
-            top: -2px;
-            font-size: 20px;
+        > legend {
+            cursor: pointer;
+            display: block;
             font-weight: bold;
+            position: relative;
+            margin-left: -15px;
+    
+            font-size: 16px;
+            color: #464646;
+            padding: 2px 10px 2px 20px;
+            background: linear-gradient(to bottom, #ededed 0%, #c7c7c7 100%);
+            border-radius: 4px;
+            border: 1px solid #2e2e2e;
+            box-shadow: 0px 1px 3px rgba(000, 000, 000, 0.3), inset 0px 0px 1px rgba(255, 255, 255, 1);
+            text-shadow: 0px -1px 0px rgba(000, 000, 000, 0.7), 0px 1px 0px rgba(255, 255, 255, 0.3);
+        
+            &::before {
+                content: " + ";
+                position: absolute;
+                left: 5px;
+                top: -2px;
+                font-size: 20px;
+                font-weight: bold;
+            }
+        }        
+
+        &.active {
+            height: auto;
+
+            > legend::before {
+                content: " – ";
+                top: -3px;
+            }
         }
-    }
 
-    .fieldset.active > legend::before {
-        content: " – ";
-        top: -3px;
-    }
-
-    .fieldset small {
-        display: none;
+        small {
+            display: none;
+        }
     }
 }
