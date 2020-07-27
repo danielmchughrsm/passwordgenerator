@@ -432,7 +432,7 @@ function CorrectHorseBatteryStaple() {
 		clearTimeout(this.notificationTimer);
 		this.notificationTimer = setTimeout(() => {
 			$('#notifications').removeClass('active');
-		}, 10000);
+		}, 3000);
 	}
 
 	const _copy = (value, subject) => navigator.clipboard
