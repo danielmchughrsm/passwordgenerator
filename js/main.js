@@ -354,7 +354,7 @@ function CorrectHorseBatteryStaple() {
 	 * @returns    {String}
 	 */
 	this.getSeparator = function(seps) {
-		return seps[ this.getUniformRandomInteger(0, seps.length) ] || "";
+		return (Array.isArray(seps) && seps.length) ? seps[ this.getUniformRandomInteger(0, seps.length) ] : "";
 	};
 
 
