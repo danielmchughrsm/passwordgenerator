@@ -1,3 +1,4 @@
+import $ from 'jquery'
 /**
  * That's a Battery Staple!
  * Correct Horse!
@@ -56,9 +57,9 @@ function CorrectHorseBatteryStaple() {
 	this.defaults = {
 		minLength:     10,
 		firstUpper:    true,
+		separator:     "-",
 		minWords:      3,
 		appendNumbers: true,
-		separator:     "-",
 		"dict-jargon": false,
 		"dict-science": false,
 	};
@@ -67,11 +68,7 @@ function CorrectHorseBatteryStaple() {
 	 * Session options
 	 * @type {Object}
 	 */
-	this.options = {};
-
-	// Set some sane defaults
-	this.options = $.extend(this.options, this.defaults);
-
+	this.options = { ...this.defaults };
 	/**
 	 * Set an option and optionally save it to LocalStorage if required.
 	 *

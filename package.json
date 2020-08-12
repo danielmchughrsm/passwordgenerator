@@ -3,16 +3,24 @@
   "private": true,
   "dependencies": {},
   "scripts": {
-    "deploy": "grunt deploy"
+    "start": "gulp",
+    "build": "gulp build"
   },
   "devDependencies": {
-    "colors": "~0.6.1",
-    "less-monitor": "~0.2.0",
-    "underscore": "~1.5.1",
-    "grunt": "~0.4.1",
-    "grunt-contrib-copy": "~0.4.0",
-    "grunt-contrib-uglify": "~0.2.2",
-    "grunt-contrib-cssmin": "~0.6.1"
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^8.0.0",
+    "browserify": "^16.5.2",
+    "fancy-log": "^1.3.3",
+    "gulp": "^4.0.2",
+    "gulp-connect": "^5.7.0",
+    "gulp-less": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.5",
+    "tsify": "^5.0.1",
+    "typescript": "^3.9.7",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^3.11.1"
   },
   "author": "John Van Der Loo",
   "license": "MIT"
