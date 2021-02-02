@@ -47,11 +47,10 @@ h1 {
     width: 1000px;
     position: relative;
     padding: 10px 50px;
-    background: #eeeeee;
     font-family: Open Sans, sans-serif;
-    /* Old browsers */
-    background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%);
+    background: #252525;
     border-radius: 0;
+    color: #fff;
 }
 
 #content {
