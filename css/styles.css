@@ -16,10 +16,10 @@
   grid-template-areas: ". .";
 }
 body {
-  background: #222;
+  background: rgb(255, 255, 255);
   color: #111;
   padding: 20px;
-  font-family: "Palatino Linotype", Palatino, Palladio, "URW Palladio L", "Book Antiqua", Baskerville, "Bookman Old Style", "Bitstream Charter", "Nimbus Roman No9 L", Garamond, "Apple Garamond", "ITC Garamond Narrow", "New Century Schoolbook", "Century Schoolbook", "Century Schoolbook L", Georgia, serif;
+  font-family: Open Sans,sans-serif;
   font-size: 16px;
 }
 input[type=text] {
@@ -40,16 +40,16 @@ h1 {
   position: relative;
   padding: 10px 50px;
   background: #eeeeee;
+  font-family: Open Sans,sans-serif;
   /* Old browsers */
   background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%);
   border-radius: 10px 10px 0 0;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
 #content {
   margin: 0 auto;
   width: 1000px;
   padding: 10px 50px 40px;
-  background: #ccc;
+  background: #f3f3f3;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.6);
 }
